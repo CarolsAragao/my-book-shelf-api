@@ -1,1 +1,49 @@
-.vs
+# Diretórios de build
+bin/
+obj/
+out/
+debug/
+release/
+
+# DLLs e outros arquivos de biblioteca
+*.dll
+*.exe
+*.pdb
+*.so
+*.dylib
+*.lib
+*.nupkg
+
+# Arquivos de configuração de usuário
+*.user
+*.suo
+*.userprefs
+*.sln.ide
+
+# Arquivos de logs
+*.log
+
+# Configurações do Visual Studio
+.vs/
+*.vscode/
+
+# Diretórios de pacotes
+packages/
+*.nupkg
+
+# Arquivos de backup
+*.bak
+*.swp
+
+# Arquivos temporários do sistema
+Thumbs.db
+ehthumbs.db
+.DS_Store
+*.tmp
+*.temp
+
+# Outras extensões de arquivos que não devem ser versionadas
+*.zip
+*.tar.gz
+*.rar
+*.7z
