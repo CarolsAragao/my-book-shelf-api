@@ -1,9 +1,10 @@
+using my_book_shelf_api.Core.Data;
+using my_book_shelf_api.Repositories;
+using my_book_shelf_api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -17,11 +18,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<ConnectionManager>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AuthRepository>();
+
 var app = builder.Build();
+
 
 app.UseCors("PoliticaLiberada");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
