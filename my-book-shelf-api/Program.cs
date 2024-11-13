@@ -17,8 +17,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-
-builder.Services.AddScoped<ConnectionManager>();
+builder.Services.AddTransient<ConnectionManager>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AuthRepository>();
 

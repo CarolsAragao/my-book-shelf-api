@@ -22,9 +22,10 @@ namespace my_book_shelf_api.Controllers
             _configuration = configuration;
         }  
 
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] AuthModel auth)
+        [HttpGet("login")]
+        public IActionResult Login([FromQuery] AuthModel auth)
         {
+            //return Ok(true);
             return Ok(_authService.GetUserToken(auth));
         } 
     }

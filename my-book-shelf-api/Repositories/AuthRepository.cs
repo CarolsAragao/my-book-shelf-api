@@ -7,18 +7,21 @@ namespace my_book_shelf_api.Repositories
     public class AuthRepository
     {
         private readonly ConnectionManager _connectionManager;
+        private readonly SqlConnection _connection;
 
         public AuthRepository(ConnectionManager connectionManager)
         {
-            _connectionManager = connectionManager;
+             _connection =  connectionManager.GetConnection();
         }
 
         public UserModel GetValidLogin(AuthModel auth)
         {
             var user = new UserModel();
 
-            using (var connection = _connectionManager.GetConnection())
+            using (var connection = _connection)
             {
+                _connection.Open();
+
                 var command = new SqlCommand("SELECT * FROM [usuario_teste].[dbo].[TbUser]", connection);
 
                 using (var reader = command.ExecuteReader())
@@ -33,7 +36,8 @@ namespace my_book_shelf_api.Repositories
                     }
                 }
             }
-            _connectionManager.CloseConnection();
+            //_connectionManager.CloseConnection();
+            _connection.Close();
 
             return user;
         }
