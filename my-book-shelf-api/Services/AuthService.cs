@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using my_book_shelf_api.Models;
 using my_book_shelf_api.Repositories;
@@ -10,17 +11,18 @@ namespace my_book_shelf_api.Services
 {
     public class AuthService
     {
-        private AuthRepository _authRepository;
+        private UserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
-        public AuthService(AuthRepository authRepository, IConfiguration configuration)
+        public AuthService(UserRepository UserRepository, IConfiguration configuration)
         {
-            _authRepository = authRepository;
+            _userRepository = UserRepository;
             _configuration = configuration;
         }   
         
-        public string GetUserToken(AuthModel auth)
+        public string Login(AuthModel auth)
         {
+            auth.Password = HashPassword(auth.Password);
             var user = ValidateUserCredentials(auth);
             var token = string.Empty;
 
@@ -33,8 +35,13 @@ namespace my_book_shelf_api.Services
 
         public UserModel ValidateUserCredentials(AuthModel auth)
         {
-            var user = _authRepository.GetValidLogin(auth);
-            if (user != null && user.Password == auth.Password && user.Email == auth.Email)
+            var user = _userRepository.GetUser(auth);
+
+            var passwordHasher = new PasswordHasher<object>();
+
+            var result = passwordHasher.VerifyHashedPassword(null, HashPassword(auth.Password), auth.Password);
+
+            if (user != null && result == PasswordVerificationResult.Success && user.Email == auth.Email)
             {
                 return user;
             }
@@ -67,6 +74,15 @@ namespace my_book_shelf_api.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string HashPassword(string password)
+        {
+            var passwordHasher = new PasswordHasher<object>();
+
+            string hashedPassword = passwordHasher.HashPassword(null, password);
+
+            return hashedPassword;
         }
     }
 }

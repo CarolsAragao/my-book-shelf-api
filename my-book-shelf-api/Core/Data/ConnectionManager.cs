@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace my_book_shelf_api.Core.Data
@@ -24,6 +25,6 @@ namespace my_book_shelf_api.Core.Data
         public SqlConnection GetConnection()
         {          
             return _connection;
-        } 
+        }   
     }
 }

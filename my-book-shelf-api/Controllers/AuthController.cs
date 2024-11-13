@@ -25,8 +25,7 @@ namespace my_book_shelf_api.Controllers
         [HttpGet("login")]
         public IActionResult Login([FromQuery] AuthModel auth)
         {
-            //return Ok(true);
-            return Ok(_authService.GetUserToken(auth));
+            return Ok(_authService.Login(auth));
         } 
     }
 }

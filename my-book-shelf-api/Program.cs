@@ -1,6 +1,9 @@
 using my_book_shelf_api.Core.Data;
 using my_book_shelf_api.Repositories;
 using my_book_shelf_api.Services;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +20,12 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-builder.Services.AddTransient<ConnectionManager>();
+builder.Services.AddScoped<ConnectionManager>();
+builder.Services.AddScoped<IDbConnection>(sp =>
+    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<UserRepository>();
 
 var app = builder.Build();
 

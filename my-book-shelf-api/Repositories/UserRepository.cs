@@ -1,20 +1,24 @@
-﻿using my_book_shelf_api.Core.Data;
+﻿using Dapper;
+using my_book_shelf_api.Core.Data;
 using my_book_shelf_api.Models;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace my_book_shelf_api.Repositories
 {
-    public class AuthRepository
+    public class UserRepository
     {
         private readonly ConnectionManager _connectionManager;
         private readonly SqlConnection _connection;
+        private readonly IDbConnection _dbConnection;
 
-        public AuthRepository(ConnectionManager connectionManager)
+        public UserRepository(ConnectionManager connectionManager, IDbConnection dbConnection)
         {
              _connection =  connectionManager.GetConnection();
+            _dbConnection = dbConnection;
         }
 
-        public UserModel GetValidLogin(AuthModel auth)
+        public UserModel GetUserADO(AuthModel auth)
         {
             var user = new UserModel();
 
@@ -36,10 +40,23 @@ namespace my_book_shelf_api.Repositories
                     }
                 }
             }
-            //_connectionManager.CloseConnection();
             _connection.Close();
 
             return user;
         }
+
+        public UserModel GetUser(AuthModel auth)
+        {
+            var user = new UserModel();
+
+            using (var connection = _connection)
+            {
+                var query = "SELECT * FROM [usuario_teste].[dbo].[TbUser] WHERE Email = @Email";
+
+                user = _dbConnection.QueryFirstOrDefault<UserModel>(query, auth);                
+            }
+
+            return user;
+        }     
     }
 }
