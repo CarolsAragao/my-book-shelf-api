@@ -22,33 +22,33 @@ namespace my_book_shelf_api.Services
 
         public ApiResponse<string> Login(AuthModel auth)
         {
-            var userToken = ValidateUserCredentials(auth);
-            var tokenJWT = string.Empty;
+            var user = _userRepository.GetUser(auth);
+            
+            if (user is null) return new ApiResponse<string>(false, "Usuário não encontrado.", "");
 
-            if (userToken is not null)
+            var validatedUser = ValidateUserCredentials(auth, user);
+
+            if (validatedUser)
             {
-                tokenJWT = GenerateJwtToken(userToken);
-                return new ApiResponse<string>(true, "Sucesso", tokenJWT);
+                var tokenJWT = GenerateJwtToken(user);
+                return new ApiResponse<string>(true, "Credenciais validadas.", tokenJWT);
             }
-            return new ApiResponse<string>(false, "Erro", tokenJWT);
+
+            return new ApiResponse<string>(false, "Credenciais inválidas.", "");
         }
 
-        public Token ValidateUserCredentials(AuthModel auth)
-        {
-            var user = _userRepository.GetUser(auth);
-
+        public bool ValidateUserCredentials(AuthModel auth, User user)
+        {           
             var passwordHasher = new PasswordHasher<object>();
 
             var result = passwordHasher.VerifyHashedPassword(null, user.Password, auth.Password);
 
-            if (user != null && result == PasswordVerificationResult.Success && user.Email == auth.Email)
-            {
-                return user;
-            }
-            return null;
+            if (result == PasswordVerificationResult.Success && user.Email == auth.Email) return true;
+
+            return false;
         }
 
-        private string GenerateJwtToken(Token userToken)
+        private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
@@ -59,11 +59,11 @@ namespace my_book_shelf_api.Services
 
             var claims = new[]
             {
-                new Claim("Guid", userToken.Guid.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, userToken.Name),
-                new Claim(JwtRegisteredClaimNames.Email, userToken.Email),
-                new Claim("CPF", userToken.CPF),
-                new Claim("UserType", userToken.UserType),
+                new Claim("Guid", user.Guid.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Name),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("CPF", user.CPF),
+                new Claim("UserType", user.UserType),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

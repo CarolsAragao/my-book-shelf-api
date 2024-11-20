@@ -18,9 +18,9 @@ namespace my_book_shelf_api.Repositories
             _dbConnection = dbConnection;
         }
 
-        public Token GetUserADO(AuthModel auth)
+        public User GetUserADO(AuthModel auth)
         {
-            var user = new Token();
+            var user = new User();
 
             using (var connection = _connection)
             {
@@ -45,17 +45,16 @@ namespace my_book_shelf_api.Repositories
             return user;
         }
 
-        public Token GetUser(AuthModel auth)
+        public User GetUser(AuthModel auth)
         {
-            var user = new Token();
+            var user = new User();
 
             using (var connection = _connection)
             {
                 var query = "SELECT * FROM [usuario_teste].[dbo].[TbUser] WHERE Email = @Email";
 
-                user = _dbConnection.QueryFirstOrDefault<Token>(query, auth);                
+                user = _dbConnection.QueryFirstOrDefault<User>(query, auth);                
             }
-            //TODO: tratar nulos
             return user;
         }     
     }

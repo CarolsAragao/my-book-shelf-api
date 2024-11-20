@@ -1,6 +1,6 @@
 ﻿namespace my_book_shelf_api.Models
 {
-    public class Token
+    public class User
     {
         public Guid Guid { get; set; }
         public string Name { get; set; }
