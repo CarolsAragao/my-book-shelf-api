@@ -1,17 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
+using my_book_shelf_api.Core.Base.Controller;
 using my_book_shelf_api.Models;
 using my_book_shelf_api.Services;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace my_book_shelf_api.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+{    
+    public class AuthController : BaseController
     {
         private readonly AuthService _authService;
         private readonly IConfiguration _configuration;
@@ -25,7 +19,8 @@ namespace my_book_shelf_api.Controllers
         [HttpGet("login")]
         public IActionResult Login([FromQuery] AuthModel auth)
         {
-            return Ok(_authService.Login(auth));
+            var res = _authService.Login(auth);
+            return Ok(res);
         } 
     }
 }

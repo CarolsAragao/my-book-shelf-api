@@ -59,11 +59,11 @@ namespace my_book_shelf_api.Services
 
             var claims = new[]
             {
-                new Claim("Guid", user.Guid.ToString()),
+                new Claim("Id", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Name),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("CPF", user.CPF),
-                new Claim("UserType", user.UserType),
+                //new Claim("UserType", user.UserType),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

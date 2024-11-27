@@ -36,7 +36,7 @@ namespace my_book_shelf_api.Repositories
                         user.Email = reader.GetString(2);
                         user.Password = reader.GetString(3);
                         user.CPF = reader.GetString(4);
-                        user.UserType = reader.GetString(5);
+                        //user.UserType = reader.GetString(5);
                     }
                 }
             }
