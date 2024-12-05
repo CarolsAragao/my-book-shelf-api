@@ -1,10 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using my_book_shelf_api.Core.Data;
-using my_book_shelf_api.Core.ModelMapper;
-using my_book_shelf_api.Repositories;
-using my_book_shelf_api.Services;
-using System.Data;
-using System.Data.SqlClient;
+using my_book_shelf_api.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,19 +15,9 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-builder.Services.AddScoped<ConnectionManager>();
-builder.Services.AddScoped<IDbConnection>(sp =>
-    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<DataContext>();
-
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<UserRepository>();
-//builder.Services.AddAutoMapper(ModelMapper);
-
+builder.Services.AddDataBaseConnection(builder.Configuration);
+builder.Services.RegistersDependencies();
 
 var app = builder.Build();
 

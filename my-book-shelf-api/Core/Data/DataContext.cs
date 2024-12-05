@@ -18,5 +18,10 @@ namespace my_book_shelf_api.Core.Data
                 .Property(u => u.UserType)
                 .HasConversion<int>(); 
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
     }
 }

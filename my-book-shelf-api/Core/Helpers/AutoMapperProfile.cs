@@ -2,11 +2,11 @@
 using my_book_shelf_api.Models;
 using AutoMapper;
 
-namespace my_book_shelf_api.Core.ModelMapper
+namespace my_book_shelf_api.Core.Helpers
 {
-    public class ModelMapper : Profile
+    public class AutoMapperProfile : Profile
     {
-        public ModelMapper()
+        public AutoMapperProfile()
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();

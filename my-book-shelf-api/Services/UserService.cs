@@ -9,9 +9,9 @@ namespace my_book_shelf_api.Services
     public class UserService
     {
         private readonly DataContext _context;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public UserService(DataContext context, Mapper mapper)
+        public UserService(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
