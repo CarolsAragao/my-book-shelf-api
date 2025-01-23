@@ -36,4 +36,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () =>
+{
+    return $"Hello from {typeof(Program).Assembly.GetName().Name}!";
+}).ExcludeFromDescription();
+
 app.Run();
