@@ -12,10 +12,12 @@ public class UserCreate : BaseModel
     public UserType UserType { get; set; }
     public bool Active { get; set; }
 
-    public UserCreate()
+    public UserCreate(string password)
     {
         CreateDate = DateTime.Now;
-        Password = HashPassword(Password);
+        Password = HashPassword(password);
+        UserType = UserType.USER;
+        Active = true;
     }
 
     public string HashPassword(string password)
