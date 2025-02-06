@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using my_book_shelf_api.Core.Base.Model;
 using my_book_shelf_api.Core.Data;
 using my_book_shelf_api.Models;
 using my_book_shelf_api.Models.Dto;
@@ -16,12 +17,18 @@ public class UserService
         _context = context;
         _mapper = mapper;
     }
-    public async Task<bool> Create(UserCreate userCreate)
+    public async Task<ApiResponse<string>> Create(UserCreate userCreate)
     {
         var usermapped = _mapper.Map<User>(userCreate);
         _context.Users.Add(usermapped);
         var res = await _context.SaveChangesAsync() > 0;
-        return res;
+
+        if (res)
+        {
+            return new ApiResponse<string>(true, "User created!", "");
+        } 
+
+        return new ApiResponse<string>(false, "Error to create new User", "");
     }
 
     public async Task<IEnumerable<UserDto>> Get()
@@ -32,8 +39,8 @@ public class UserService
     }
 
     public User GetUserByEmail(string email)
-    {     
-        var res =  _context.Users.Where(user => user.Email == email).First();
+    {
+        var res = _context.Users.Where(user => user.Email == email).FirstOrDefault();
         return res;
     }
 
