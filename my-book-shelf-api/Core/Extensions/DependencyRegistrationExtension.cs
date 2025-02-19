@@ -13,6 +13,7 @@ public static class DependencyRegistrationExtension
         service.AddScoped<AuthService>();
         service.AddScoped<UserService>();
         service.AddScoped<UserRepository>();
+        service.AddScoped<BookService>();
 
         service.AddAutoMapper(typeof(UserProfile).Assembly);
 

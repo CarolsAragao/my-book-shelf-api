@@ -9,6 +9,7 @@ namespace my_book_shelf_api.Core.Data
         {
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Book> Books { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
