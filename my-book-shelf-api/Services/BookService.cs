@@ -33,6 +33,20 @@ namespace my_book_shelf_api.Services
             return new ApiResponse<IEnumerable<BookDto>>(true, "", resMapped);
         }
 
+        public async Task<ApiResponse<BookDto>> GetBookById(Guid id)
+        {
+            var res = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
+
+            var bookMapped = _mapper.Map<BookDto>(res);
+
+            if(res is null)
+            {
+                return new ApiResponse<BookDto> (false, "Could find any Book", new BookDto());
+            }
+
+            return new ApiResponse<BookDto>(true, "", bookMapped);
+        }
+
         public async Task<ApiResponse<bool>> Create(BookDtoCreate bookDtoCreate)
         {
             var mappedBook = _mapper.Map<Book>(bookDtoCreate);
@@ -47,6 +61,37 @@ namespace my_book_shelf_api.Services
             }
 
             return new ApiResponse<bool>(true, "Book Created", true);
+        }
+
+        public async Task<ApiResponse<bool>> Update(BookDtoUpdate bookDtoUpdate)
+        {
+            var mappedBook =  _mapper.Map<Book>(bookDtoUpdate);
+
+            _context.Books.Update(mappedBook);
+
+            var res = await _context.SaveChangesAsync();
+
+            if (res == 0)
+            {
+                return new ApiResponse<bool>(false, "Not updated", false);
+            }
+
+            return new ApiResponse<bool>(true, "Book updated", true);
+        }
+
+        public async Task<ApiResponse<bool>> Delete(Guid id)
+        {
+            var book = _context.Books.FirstOrDefault(b => b.Id == id);
+
+            if(book is null)
+            {
+                return new ApiResponse<bool>(false, "Not deleted", false);
+            }
+
+            _context.Remove(book);
+            var res = await _context.SaveChangesAsync();
+
+            return new ApiResponse<bool>(true, "Book deleted!!!", true);
         }
     }
 }

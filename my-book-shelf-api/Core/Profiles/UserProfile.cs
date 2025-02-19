@@ -15,5 +15,6 @@ public class UserProfile : Profile
         CreateMap<BookDto, Book>();
         CreateMap<Book, BookDto>();
         CreateMap<BookDtoCreate, Book>();
+        CreateMap<BookDtoUpdate, Book>();
     }
 }

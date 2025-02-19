@@ -23,10 +23,31 @@ namespace my_book_shelf_api.Controllers
             return Ok(res);
         }
 
+        [HttpGet("GetBookById/{id}")]
+        public async Task<IActionResult> GetBookById([FromRoute] Guid id)
+        {
+            var res = await _bookService.GetBookById(id);
+            return Ok(res);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(BookDtoCreate bookDtoCreate)
         {
             var res = await _bookService.Create(bookDtoCreate);
+            return Ok(res);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(BookDtoUpdate bookDtoUpdate)
+        {
+            var res = await _bookService.Update(bookDtoUpdate);
+            return Ok(res);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var res = await _bookService.Delete(id);
             return Ok(res);
         }
     }
