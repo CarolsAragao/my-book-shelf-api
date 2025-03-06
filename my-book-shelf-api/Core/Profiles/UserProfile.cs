@@ -13,7 +13,12 @@ public class UserProfile : Profile
         CreateMap<UserCreate, User>();
 
         CreateMap<BookDto, Book>();
-        CreateMap<Book, BookDto>();
+        CreateMap<Book, BookDto>()
+            .ForMember(dest => dest.Cover, opt => opt.MapFrom(src =>
+                string.IsNullOrEmpty(src.Cover)
+                    ? "https://thumbs.dreamstime.com/z/open-book-hand-drawn-illustration-vector-graphic-sketch-literary-volume-219191827.jpg?ct=jpeg"
+                    : src.Cover)); 
+
         CreateMap<BookDtoCreate, Book>();
         CreateMap<BookDtoUpdate, Book>();
     }
