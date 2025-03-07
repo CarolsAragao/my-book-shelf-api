@@ -18,22 +18,21 @@ namespace my_book_shelf_api.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<IEnumerable<BookDto>>> Get()
+        public async Task<Result<IEnumerable<BookDto>>> Get()
         {
-
             var res =  await _context.Books.ToListAsync();
 
             var resMapped = _mapper.Map<IEnumerable<BookDto>>(res);
 
             if(resMapped is null)
             {
-                return new ApiResponse<IEnumerable<BookDto>>(false, "Could find any Book", new List<BookDto>());
+                return Result<IEnumerable<BookDto>>.Fail("Could find any Book");
             }
 
-            return new ApiResponse<IEnumerable<BookDto>>(true, "", resMapped);
+            return Result<IEnumerable<BookDto>>.Ok(resMapped, "");
         }
 
-        public async Task<ApiResponse<BookDto>> GetBookById(Guid id)
+        public async Task<Result<BookDto>> GetBookById(Guid id)
         {
             var res = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
 
@@ -41,13 +40,13 @@ namespace my_book_shelf_api.Services
 
             if(res is null)
             {
-                return new ApiResponse<BookDto> (false, "Could find any Book", new BookDto());
+                return Result<BookDto>.Fail("Could find any Book");
             }
 
-            return new ApiResponse<BookDto>(true, "", bookMapped);
+            return Result<BookDto>.Ok(bookMapped, "");
         }
 
-        public async Task<ApiResponse<bool>> Create(BookDtoCreate bookDtoCreate)
+        public async Task<Result<bool>> Create(BookDtoCreate bookDtoCreate)
         {
             var mappedBook = _mapper.Map<Book>(bookDtoCreate);
 
@@ -57,13 +56,13 @@ namespace my_book_shelf_api.Services
 
             if(res == 0)
             {
-                return new ApiResponse<bool>(false, "Not Created", false);
+                return Result<bool>.Fail("Not Created");
             }
 
-            return new ApiResponse<bool>(true, "Book Created", true);
+            return Result<bool>.Ok();
         }
 
-        public async Task<ApiResponse<bool>> Update(BookDtoUpdate bookDtoUpdate)
+        public async Task<Result<bool>> Update(BookDtoUpdate bookDtoUpdate)
         {
             var mappedBook =  _mapper.Map<Book>(bookDtoUpdate);
 
@@ -73,25 +72,25 @@ namespace my_book_shelf_api.Services
 
             if (res == 0)
             {
-                return new ApiResponse<bool>(false, "Not updated", false);
+                return Result<bool>.Fail("Not updated");
             }
 
-            return new ApiResponse<bool>(true, "Book updated", true);
+            return Result<bool>.Ok();
         }
 
-        public async Task<ApiResponse<bool>> Delete(Guid id)
+        public async Task<Result<bool>> Delete(Guid id)
         {
             var book = _context.Books.FirstOrDefault(b => b.Id == id);
 
             if(book is null)
             {
-                return new ApiResponse<bool>(false, "Not deleted", false);
+                return Result<bool>.Fail("Not Deleted");
             }
 
             _context.Remove(book);
             var res = await _context.SaveChangesAsync();
 
-            return new ApiResponse<bool>(true, "Book deleted!!!", true);
+            return Result<bool>.Ok();
         }
     }
 }

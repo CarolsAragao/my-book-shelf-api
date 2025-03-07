@@ -20,21 +20,21 @@ public class AuthService
         _userService = userService;
     }
 
-    public ApiResponse<string> Login(AuthModel auth)
+    public Result<string> Login(AuthModel auth)
     {
         var user = _userService.GetUserByEmail(auth.Email);
     
-        if (user is null) return new ApiResponse<string>(false, "Usuário não encontrado.", "");
+        if (user is null) return Result<string>.Fail("Usuário não encontrado.");
 
         var validatedUser = ValidateUserCredentials(auth, user);
 
         if (validatedUser)
         {
             var tokenJWT = GenerateJwtToken(user);
-            return new ApiResponse<string>(true, "Credenciais validadas.", tokenJWT);
+            return Result<string>.Ok(null, "Credenciais validadas.");
         }
 
-        return new ApiResponse<string>(false, "Credenciais inválidas.", "");
+        return Result<string>.Fail("Credenciais inválidas.");
     }
 
     public bool ValidateUserCredentials(AuthModel auth, User user)

@@ -17,7 +17,7 @@ public class UserService
         _context = context;
         _mapper = mapper;
     }
-    public async Task<ApiResponse<string>> Create(UserCreate userCreate)
+    public async Task<Result<bool>> Create(UserCreate userCreate)
     {
         var usermapped = _mapper.Map<User>(userCreate);
         _context.Users.Add(usermapped);
@@ -25,10 +25,10 @@ public class UserService
 
         if (res)
         {
-            return new ApiResponse<string>(true, "User created!", "");
+            return Result<bool>.Ok();
         } 
 
-        return new ApiResponse<string>(false, "Error to create new User", "");
+        return Result<bool>.Fail("Error to create new User");
     }
 
     public async Task<IEnumerable<UserDto>> Get()
